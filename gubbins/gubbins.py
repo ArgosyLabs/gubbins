@@ -11,6 +11,10 @@ class Gubbins:
         "0O2ZiIlL ABCDEFGHJKMNPQRSTUVWXY",
         "oozz1111 abcdefghjkmnpqrstuvwxy",
         )
+    __prefix_fixer = str.maketrans(
+        "oOiIlLzZ",
+        "00111122",
+        )
     __formatter = str.maketrans('ajnrtuv', 'AJNRTUV')
     __checksum = partial(reduce, lambda x,y: x^y)
 
@@ -22,6 +26,7 @@ class Gubbins:
 
     @staticmethod
     def __prefix_to_seed(prefix):
+        assert prefix == Gubbins._fix_prefix(prefix)
         hash = Gubbins.__hash(prefix.lower().encode()).digest(4)
         seed = int.from_bytes(hash, byteorder='big')
         checksum = Gubbins.__checksum(hash)
@@ -62,7 +67,12 @@ class Gubbins:
         return x
 
     @staticmethod
+    def _fix_prefix(prefix):
+        return prefix.translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
+
+    @staticmethod
     def generate(prefix, id):
+        prefix = Gubbins._fix_prefix(prefix)
         prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix)
 
         assert 0 <= id <= Gubbins.__mask
@@ -73,15 +83,17 @@ class Gubbins:
         assert prefix_checksum == Gubbins.__checksum(id_bytes)
 
         id_value = Gubbins.__encode(id_bytes, Gubbins.__alphabet).decode()
-        return Gubbins.canonicalize(Gubbins.__separator.join((prefix, *sliced(id_value, 4))))
+        return Gubbins.__separator.join((prefix, *sliced(id_value, 4))).translate(Gubbins.__formatter)
 
     @staticmethod
     def canonicalize(serial):
-        return serial.translate(Gubbins.__formatter)
+        prefix, id = Gubbins.validate(serial)
+        return Gubbins.generate(prefix, id)
 
     @staticmethod
     def validate(serial):
         prefix, *id_chunks = serial.split(Gubbins.__separator)
+        prefix = Gubbins._fix_prefix(prefix)
         prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix)
 
         id_value = ''.join(id_chunks).translate(Gubbins.__normalizer)
@@ -95,6 +107,6 @@ class Gubbins:
         id = prefix_seed ^ Gubbins.__unhash_id(prefix_seed ^ id_point)
         assert 0 <= id <= Gubbins.__mask
 
-        return prefix.translate(Gubbins.__formatter), id
+        return prefix, id
 
 #
