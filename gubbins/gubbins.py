@@ -8,8 +8,8 @@ class Gubbins:
     __separator = '-'
     __alphabet = b"ybndrfg8ejkmcpqxot1uwvsza345h769" # modified zbase32
     __normalizer = str.maketrans(
-        "02il ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        "oz11 abcdefghijklmnopqrstuvwxyz",
+        "0O2ZiIlL ABCDEFGHJKMNPQRSTUVWXY",
+        "oozz1111 abcdefghjkmnpqrstuvwxy",
         )
     __formatter = str.maketrans('ajnrtuv', 'AJNRTUV')
     __checksum = partial(reduce, lambda x,y: x^y)
