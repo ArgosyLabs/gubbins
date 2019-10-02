@@ -15,7 +15,10 @@ class Gubbins:
         "oOiIlLzZ",
         "00111122",
         )
-    __formatter = str.maketrans('ajnrtuv', 'AJNRTUV')
+    __formatter = str.maketrans(
+        "ajnrtuv BCDEFGHIKLMOPQSWXYZ",
+        "AJNRTUV bcdefghiklmopqswxyz",
+        )
     __checksum = partial(reduce, lambda x,y: x^y)
 
     from hashlib import shake_128 as __hash
