@@ -28,5 +28,9 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     include_package_data=True,
+    entry_points = { "console_scripts": [
+        "gubbins=gubbins.generate:main",
+        "ungubbins=gubbins.validate:main",
+    ] },
 )
 #
