@@ -22,7 +22,7 @@ if __name__ == "__main__":
         serial = Gubbins.generate(args.prefix, i)
 
         if args.validate:
-            validation = (args.prefix, i)
+            validation = (Gubbins._fix_prefix(args.prefix), i)
             assert validation == Gubbins.validate(serial)
             assert validation == Gubbins.validate(serial.upper())
             assert validation == Gubbins.validate(serial.lower())
