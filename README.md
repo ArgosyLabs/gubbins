@@ -11,7 +11,9 @@ from gubbins import Gubbins
 
 for i in range(10):
 	serial = Gubbins.generate("AX", i)
-	assert "AX", i == Gubbins.validate(serial)
+	prefix, id = Gubbins.validate(serial)
+	assert prefix.lower() == "AX".lower()
+	assert id == i
 	print(i, serial)
 ```
 
