@@ -3,7 +3,7 @@
 
 from .gubbins import Gubbins
 
-if __name__ == "__main__":
+def main():
     from sys import stdin
     from argparse import ArgumentParser
     from pynumparser import NumberSequence
@@ -32,5 +32,8 @@ if __name__ == "__main__":
             print(serial)
         else:
             print(i, serial)
+
+if __name__ == "__main__":
+    main()
 
 #
