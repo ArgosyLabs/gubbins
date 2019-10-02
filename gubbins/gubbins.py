@@ -28,8 +28,10 @@ class Gubbins:
     class ChecksumError(Error): pass
 
     @staticmethod
-    def __prefix_to_seed(prefix):
+    def __prefix_to_seed(prefix, ad):
         assert prefix == Gubbins._fix_prefix(prefix)
+        if ad is not None:
+            prefix = "-".join((ad, prefix))
         hash = Gubbins.__hash(prefix.lower().encode()).digest(4)
         seed = int.from_bytes(hash, byteorder='big')
         checksum = Gubbins.__checksum(hash)
@@ -74,9 +76,9 @@ class Gubbins:
         return prefix.translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
 
     @staticmethod
-    def generate(prefix, id):
+    def generate(prefix, id, ad=None):
         prefix = Gubbins._fix_prefix(prefix)
-        prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix)
+        prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix, ad)
 
         assert 0 <= id <= Gubbins.__mask
         id_point = prefix_seed ^ Gubbins.__hash_id(prefix_seed ^ id)
@@ -89,15 +91,15 @@ class Gubbins:
         return Gubbins.__separator.join((prefix, *sliced(id_value, 4))).translate(Gubbins.__formatter)
 
     @staticmethod
-    def canonicalize(serial):
-        prefix, id = Gubbins.validate(serial)
-        return Gubbins.generate(prefix, id)
+    def canonicalize(serial, ad=None):
+        prefix, id = Gubbins.validate(serial, ad)
+        return Gubbins.generate(prefix, id, ad)
 
     @staticmethod
-    def validate(serial):
+    def validate(serial, ad=None):
         prefix, *id_chunks = serial.split(Gubbins.__separator)
         prefix = Gubbins._fix_prefix(prefix)
-        prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix)
+        prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix, ad)
 
         id_value = ''.join(id_chunks).translate(Gubbins.__normalizer)
         id_bytes = Gubbins.__decode(id_value.encode(), Gubbins.__alphabet)

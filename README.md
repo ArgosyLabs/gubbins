@@ -4,7 +4,7 @@ Serial number generator/validator
 
 A simple but powerful serial number generator and validator written in
 Python.  Given a Prefix and a 32-bit ID, produces a Serial.  Given a valid
-Serial, returns the Prefix and 32-bit ID.
+Serial, returns the Prefix and 32-bit ID.  Optionally takes Additional Data.
 
 ```python
 from gubbins import Gubbins
