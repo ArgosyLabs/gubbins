@@ -29,7 +29,7 @@ class Gubbins:
 
     @staticmethod
     def __prefix_to_seed(prefix, ad):
-        assert prefix == Gubbins._fix_prefix(prefix)
+        assert prefix.lower() == prefix.translate(Gubbins.__prefix_fixer).lower()
         if ad is not None:
             prefix = "-".join((ad, prefix))
         hash = Gubbins.__hash(prefix.lower().encode()).digest(4)
@@ -72,16 +72,12 @@ class Gubbins:
         return x
 
     @staticmethod
-    def _fix_prefix(prefix):
-        return prefix.translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
-
-    @staticmethod
     def prefix(serial):
         return serial.split(Gubbins.__separator)[0].translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
 
     @staticmethod
     def generate(prefix, id, ad=None):
-        prefix = Gubbins._fix_prefix(prefix)
+        prefix = prefix.translate(Gubbins.__prefix_fixer)
         prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix, ad)
 
         assert 0 <= id <= Gubbins.__mask
@@ -102,7 +98,7 @@ class Gubbins:
     @staticmethod
     def validate(serial, ad=None):
         prefix, *id_chunks = serial.split(Gubbins.__separator)
-        prefix = Gubbins._fix_prefix(prefix)
+        prefix = prefix.translate(Gubbins.__prefix_fixer)
         prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix, ad)
 
         id_value = ''.join(id_chunks).translate(Gubbins.__normalizer)
