@@ -20,8 +20,33 @@ for i in range(10):
 or via the command-line,
 
 ```bash
-python3 -m gubbins.generate 1-10 --solo --prefix AX | python3 -m gubbins.validate
+gubbins 1-10 --solo --prefix AX | ungubbins
 ```
+
+Gubbins has several interesting features.  A Gubbins Serial
+* is human-friendly,
+* ignores case,
+* fixes up typos,
+* can be reversed,
+* contains a checksum,
+* avoids collisions, &
+* attempts to prevent enumeration.
+
+Modifying any of Prefix, ID, or Additional Data results in a different
+Serial.
+
+Gubbins uses a lightly modified
+[z-base-32](https://philzimmermann.com/docs/human-oriented-base-32-encoding.txt)
+alphabet, with the letters `AJNRTUV` canonically upper-case and all other
+letters lower-case.  The validator will automatically fix up typos related
+to `oO0`, `iIlL1`, & `zZ2`.
+
+For best results,
+* a Prefix can not contain the characters `-oOiIlLzZ`,
+* IDs should not be sequential, &
+* Additional Data may depend on the Prefix but must not be derived from it.
+
+Note: we make no security claims about Gubbins. YMMV
 
 Requires
 * [more_itertools](https://github.com/erikrose/more-itertools),
