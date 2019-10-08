@@ -17,7 +17,7 @@ def main():
     parser.add_argument("args", nargs="*", type=NumberSequence(limits=(0, 2**32 - 1)))
     args = parser.parse_args()
 
-    assert args.prefix.lower() == Gubbins._fix_prefix(args.prefix).lower()
+    assert args.prefix.lower() == Gubbins.prefix(args.prefix).lower()
 
     for i in chain.from_iterable(args.args or map(lambda line: map(lambda line: int(line,0), line.split()), stdin)):
         serial = Gubbins.generate(args.prefix, i, args.additional)
