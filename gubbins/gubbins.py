@@ -76,6 +76,10 @@ class Gubbins:
         return prefix.translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
 
     @staticmethod
+    def prefix(serial):
+        return serial.split(Gubbins.__separator)[0].translate(Gubbins.__prefix_fixer).translate(Gubbins.__formatter)
+
+    @staticmethod
     def generate(prefix, id, ad=None):
         prefix = Gubbins._fix_prefix(prefix)
         prefix_seed, prefix_checksum = Gubbins.__prefix_to_seed(prefix, ad)
