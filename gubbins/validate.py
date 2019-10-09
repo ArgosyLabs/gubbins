@@ -6,7 +6,6 @@ from .gubbins import Gubbins
 def main():
     from sys import stdin
     from argparse import ArgumentParser
-    from pynumparser import NumberSequence
     from itertools import chain
 
     parser = ArgumentParser()
